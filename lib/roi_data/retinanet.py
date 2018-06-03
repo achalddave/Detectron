@@ -15,10 +15,10 @@
 
 """Compute minibatch blobs for training a RetinaNet network."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
+
+
 
 import numpy as np
 import logging
@@ -117,7 +117,7 @@ def add_retinanet_blobs(blobs, im_scales, roidb, image_width, image_height):
         retinanet_blobs, fg_num, bg_num = _get_retinanet_blobs(
             foas, all_anchors, gt_rois, gt_classes, image_width, image_height)
         for i, foa in enumerate(foas):
-            for k, v in retinanet_blobs[i].items():
+            for k, v in list(retinanet_blobs[i].items()):
                 # the way it stacks is:
                 # [[anchors for image1] + [anchors for images 2]]
                 level = int(np.log2(foa.stride))
@@ -144,7 +144,7 @@ def add_retinanet_blobs(blobs, im_scales, roidb, image_width, image_height):
     blobs['retnet_bg_num'] = blobs['retnet_bg_num'].astype(np.float32)
 
     N = len(roidb)
-    for k, v in blobs.items():
+    for k, v in list(blobs.items()):
         if isinstance(v, list) and len(v) > 0:
             # compute number of anchors
             A = int(len(v) / N)

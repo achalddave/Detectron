@@ -18,10 +18,10 @@ that are specific to Fast R-CNN. Other blobs that are generic to RPN, etc.
 are handled by their respecitive roi_data modules.
 """
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
+
+
 
 import logging
 import numpy as np
@@ -110,10 +110,10 @@ def add_fast_rcnn_blobs(blobs, im_scales, roidb):
     # Sample training RoIs from each image and append them to the blob lists
     for im_i, entry in enumerate(roidb):
         frcn_blobs = _sample_rois(entry, im_scales[im_i], im_i)
-        for k, v in frcn_blobs.items():
+        for k, v in list(frcn_blobs.items()):
             blobs[k].append(v)
     # Concat the training blob lists into tensors
-    for k, v in blobs.items():
+    for k, v in list(blobs.items()):
         if isinstance(v, list) and len(v) > 0:
             blobs[k] = np.concatenate(v)
     # Add FPN multilevel training RoIs, if configured

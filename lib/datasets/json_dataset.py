@@ -20,13 +20,13 @@ the COCO json format and use the existing code; it is not recommended to write
 code to support new dataset formats.
 """
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
+
+
 
 import copy
-import cPickle as pickle
+import pickle as pickle
 import logging
 import numpy as np
 import os
@@ -54,7 +54,7 @@ class JsonDataset(object):
     """A class representing a COCO json dataset."""
 
     def __init__(self, name):
-        assert name in DATASETS.keys(), \
+        assert name in list(DATASETS.keys()), \
             'Unknown dataset name: {}'.format(name)
         assert os.path.exists(DATASETS[name][IM_DIR]), \
             'Image directory \'{}\' not found'.format(DATASETS[name][IM_DIR])
@@ -71,7 +71,7 @@ class JsonDataset(object):
         # Set up dataset classes
         category_ids = self.COCO.getCatIds()
         categories = [c['name'] for c in self.COCO.loadCats(category_ids)]
-        self.category_to_id_map = dict(zip(categories, category_ids))
+        self.category_to_id_map = dict(list(zip(categories, category_ids)))
         self.classes = ['__background__'] + categories
         self.num_classes = len(self.classes)
         self.json_category_id_to_contiguous_id = {
@@ -80,7 +80,7 @@ class JsonDataset(object):
         }
         self.contiguous_category_id_to_json_id = {
             v: k
-            for k, v in self.json_category_id_to_contiguous_id.items()
+            for k, v in list(self.json_category_id_to_contiguous_id.items())
         }
         self._init_keypoints()
 
@@ -297,7 +297,7 @@ class JsonDataset(object):
         if 'keypoints' in cat_info[0]:
             keypoints = cat_info[0]['keypoints']
             self.keypoints_to_id_map = dict(
-                zip(keypoints, range(len(keypoints))))
+                list(zip(keypoints, list(range(len(keypoints))))))
             self.keypoints = keypoints
             self.num_keypoints = len(keypoints)
             self.keypoint_flip_map = {

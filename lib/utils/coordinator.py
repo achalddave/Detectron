@@ -15,14 +15,14 @@
 
 """Coordinated access to a shared multithreading/processing queue."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
+
+
 
 import contextlib
 import logging
-import Queue
+import queue
 import threading
 import traceback
 
@@ -58,7 +58,7 @@ def coordinated_get(coordinator, queue):
     while not coordinator.should_stop():
         try:
             return queue.get(block=True, timeout=1.0)
-        except Queue.Empty:
+        except queue.Empty:
             continue
     raise Exception('Coordinator stopped during get()')
 
@@ -68,6 +68,6 @@ def coordinated_put(coordinator, queue, element):
         try:
             queue.put(element, block=True, timeout=1.0)
             return
-        except Queue.Full:
+        except queue.Full:
             continue
     raise Exception('Coordinator stopped during put()')

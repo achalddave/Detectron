@@ -3,12 +3,12 @@
 #
 # cityscapes_to_coco
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
 
-import cPickle as pickle
+
+
+
+
+import pickle as pickle
 import argparse
 import os
 import sys
@@ -45,7 +45,7 @@ def parse_args():
 
 
 def convert_coco_blobs_to_cityscape_blobs(model_dict):
-    for k, v in model_dict['blobs'].items():
+    for k, v in list(model_dict['blobs'].items()):
         if v.shape[0] == NUM_COCO_CLS or v.shape[0] == 4 * NUM_COCO_CLS:
             coco_blob = model_dict['blobs'][k]
             print(
@@ -86,7 +86,7 @@ def convert_coco_blob_to_cityscapes_blob(coco_blob, convert_func):
 
 
 def remove_momentum(model_dict):
-    for k in model_dict['blobs'].keys():
+    for k in list(model_dict['blobs'].keys()):
         if k.endswith('_momentum'):
             del model_dict['blobs'][k]
 

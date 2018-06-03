@@ -15,10 +15,10 @@
 
 """A simple attribute dictionary used for representing configuration options."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
+
+
 
 
 class AttrDict(dict):
@@ -55,10 +55,10 @@ class AttrDict(dict):
         """
         self.__dict__[AttrDict.IMMUTABLE] = is_immutable
         # Recursively set immutable state
-        for v in self.__dict__.values():
+        for v in list(self.__dict__.values()):
             if isinstance(v, AttrDict):
                 v.immutable(is_immutable)
-        for v in self.values():
+        for v in list(self.values()):
             if isinstance(v, AttrDict):
                 v.immutable(is_immutable)
 

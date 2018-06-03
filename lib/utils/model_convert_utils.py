@@ -15,10 +15,10 @@
 
 '''Helper functions for model conversion to pb'''
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
+
+
 
 from functools import wraps
 import copy
@@ -138,7 +138,7 @@ def pairwise(iterable):
     from itertools import tee
     a, b = tee(iterable)
     next(b, None)
-    return zip(a, b)
+    return list(zip(a, b))
 
 
 def blob_uses(net, blob):
@@ -359,8 +359,8 @@ def compare_model(model1_func, model2_func, test_image, check_blobs):
     '''
     cb1, cb2 = check_blobs, check_blobs
     if isinstance(check_blobs, dict):
-        cb1 = check_blobs.keys()
-        cb2 = check_blobs.values()
+        cb1 = list(check_blobs.keys())
+        cb2 = list(check_blobs.values())
     print('Running the first model...')
     res1 = model1_func(test_image, check_blobs)
     print('Running the second model...')

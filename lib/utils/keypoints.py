@@ -15,10 +15,10 @@
 
 """Keypoint utilities (somewhat specific to COCO keypoints)."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
+
+
 
 import cv2
 import numpy as np
@@ -73,7 +73,7 @@ def flip_keypoints(keypoints, keypoint_flip_map, keypoint_coords, width):
     accessible from get_keypoints().
     """
     flipped_kps = keypoint_coords.copy()
-    for lkp, rkp in keypoint_flip_map.items():
+    for lkp, rkp in list(keypoint_flip_map.items()):
         lid = keypoints.index(lkp)
         rid = keypoints.index(rkp)
         flipped_kps[:, :, lid] = keypoint_coords[:, :, rid]
@@ -91,7 +91,7 @@ def flip_heatmaps(heatmaps):
     """Flip heatmaps horizontally."""
     keypoints, flip_map = get_keypoints()
     heatmaps_flipped = heatmaps.copy()
-    for lkp, rkp in flip_map.items():
+    for lkp, rkp in list(flip_map.items()):
         lid = keypoints.index(lkp)
         rid = keypoints.index(rkp)
         heatmaps_flipped[:, rid, :, :] = heatmaps[:, lid, :, :]

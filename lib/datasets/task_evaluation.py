@@ -30,10 +30,10 @@ Results are stored in an OrderedDict with the following nested structure:
 <val> is a floating point number
 """
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
+
+
 
 from collections import OrderedDict
 import logging
@@ -153,7 +153,7 @@ def evaluate_box_proposals(dataset, roidb):
     res = _empty_box_proposal_results()
     areas = {'all': '', 'small': 's', 'medium': 'm', 'large': 'l'}
     for limit in [100, 1000]:
-        for area, suffix in areas.items():
+        for area, suffix in list(areas.items()):
             stats = json_dataset_evaluator.evaluate_box_proposals(
                 dataset, roidb, area=area, limit=limit
             )
@@ -164,11 +164,11 @@ def evaluate_box_proposals(dataset, roidb):
 
 def log_box_proposal_results(results):
     """Log bounding box proposal results."""
-    for dataset in results.keys():
-        keys = results[dataset]['box_proposal'].keys()
+    for dataset in list(results.keys()):
+        keys = list(results[dataset]['box_proposal'].keys())
         pad = max([len(k) for k in keys])
         logger.info(dataset)
-        for k, v in results[dataset]['box_proposal'].items():
+        for k, v in list(results[dataset]['box_proposal'].items()):
             logger.info('{}: {:.3f}'.format(k.ljust(pad), v))
 
 
@@ -176,12 +176,12 @@ def log_copy_paste_friendly_results(results):
     """Log results in a format that makes it easy to copy-and-paste in a
     spreadsheet. Lines are prefixed with 'copypaste: ' to make grepping easy.
     """
-    for dataset in results.keys():
+    for dataset in list(results.keys()):
         logger.info('copypaste: Dataset: {}'.format(dataset))
-        for task, metrics in results[dataset].items():
+        for task, metrics in list(results[dataset].items()):
             logger.info('copypaste: Task: {}'.format(task))
-            metric_names = metrics.keys()
-            metric_vals = ['{:.4f}'.format(v) for v in metrics.values()]
+            metric_names = list(metrics.keys())
+            metric_vals = ['{:.4f}'.format(v) for v in list(metrics.values())]
             logger.info('copypaste: ' + ','.join(metric_names))
             logger.info('copypaste: ' + ','.join(metric_vals))
 

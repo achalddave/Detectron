@@ -17,10 +17,10 @@
 
 """Utilities for training."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
+
+
 
 import datetime
 import numpy as np
@@ -66,12 +66,12 @@ class TrainingStats(object):
 
     def UpdateIterStats(self):
         """Update tracked iteration statistics."""
-        for k in self.losses_and_metrics.keys():
+        for k in list(self.losses_and_metrics.keys()):
             if k in self.model.losses:
                 self.losses_and_metrics[k] = nu.sum_multi_gpu_blob(k)
             else:
                 self.losses_and_metrics[k] = nu.average_multi_gpu_blob(k)
-        for k, v in self.smoothed_losses_and_metrics.items():
+        for k, v in list(self.smoothed_losses_and_metrics.items()):
             v.AddValue(self.losses_and_metrics[k])
         self.iter_total_loss = np.sum(
             np.array([self.losses_and_metrics[k] for k in self.model.losses])
@@ -106,6 +106,6 @@ class TrainingStats(object):
             ),
             mem=int(np.ceil(mem_usage / 1024 / 1024))
         )
-        for k, v in self.smoothed_losses_and_metrics.items():
+        for k, v in list(self.smoothed_losses_and_metrics.items()):
             stats[k] = v.GetMedianValue()
         return stats

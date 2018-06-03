@@ -15,13 +15,13 @@
 
 """Helper functions for working with Caffe2 networks (i.e., operator graphs)."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
+
+
 
 from collections import OrderedDict
-import cPickle as pickle
+import pickle as pickle
 import logging
 import numpy as np
 import os
@@ -56,8 +56,8 @@ def initialize_gpu_from_weights_file(model, weights_file, gpu_id=0):
     """
     logger.info('Loading weights from: {}'.format(weights_file))
     ws_blobs = workspace.Blobs()
-    with open(weights_file, 'r') as f:
-        src_blobs = pickle.load(f)
+    with open(weights_file, 'rb') as f:
+        src_blobs = pickle.load(f, encoding='latin1')
     if 'cfg' in src_blobs:
         saved_cfg = yaml.load(src_blobs['cfg'])
         configure_bbox_reg_weights(model, saved_cfg)
@@ -70,7 +70,7 @@ def initialize_gpu_from_weights_file(model, weights_file, gpu_id=0):
     for blob in model.params:
         unscoped_param_names[c2_utils.UnscopeName(str(blob))] = True
     with c2_utils.NamedCudaScope(gpu_id):
-        for unscoped_param_name in unscoped_param_names.keys():
+        for unscoped_param_name in list(unscoped_param_names.keys()):
             if (unscoped_param_name.find(']_') >= 0 and
                     unscoped_param_name not in src_blobs):
                 # Special case for sharing initialization from a pretrained
@@ -119,7 +119,7 @@ def initialize_gpu_from_weights_file(model, weights_file, gpu_id=0):
     # feature allows for alternating optimization of Faster R-CNN in which blobs
     # unused by one step can still be preserved forward and used to initialize
     # another step.
-    for src_name in src_blobs.keys():
+    for src_name in list(src_blobs.keys()):
         if (src_name not in unscoped_param_names and
                 not src_name.endswith('_momentum') and
                 src_blobs[src_name] is not None):

@@ -18,10 +18,10 @@ that are specific to Mask R-CNN. Other blobs that are generic to RPN or
 Fast/er R-CNN are handled by their respecitive roi_data modules.
 """
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
+
+
 
 import logging
 import numpy as np
