@@ -30,6 +30,7 @@ import cv2  # NOQA (Must import before importing caffe2 due to bug in cv2)
 import glob
 import logging
 import os
+import pickle
 import sys
 import time
 
@@ -106,10 +107,19 @@ def main(args):
         im_list = [args.im_or_folder]
 
     for i, im_name in enumerate(im_list):
-        out_name = os.path.join(
-            args.output_dir, '{}'.format(os.path.basename(im_name) + '.pdf')
+        base_name = os.path.splitext(os.path.basename(im_name))[0]
+        out_image = os.path.join(
+            args.output_dir, '{}'.format(base_name + '.png')
         )
-        logger.info('Processing {} -> {}'.format(im_name, out_name))
+        out_data = os.path.join(
+            args.output_dir, '{}'.format(base_name + '.pickle')
+        )
+
+        if os.path.isfile(out_image) and os.path.isfile(out_data):
+            # logger.info('Already processed {}, skipping'.format(im_name))
+            continue
+        else:
+            logger.info('Processing {} -> {}'.format(im_name, out_image))
         im = cv2.imread(im_name)
         timers = defaultdict(Timer)
         t = time.time()
@@ -126,19 +136,30 @@ def main(args):
                 'rest (caches and auto-tuning need to warm up)'
             )
 
-        vis_utils.vis_one_image(
-            im[:, :, ::-1],  # BGR -> RGB for visualization
-            im_name,
-            args.output_dir,
-            cls_boxes,
-            cls_segms,
-            cls_keyps,
-            dataset=dummy_coco_dataset,
-            box_alpha=0.3,
-            show_class=True,
-            thresh=0.7,
-            kp_thresh=2
-        )
+        if not os.path.isfile(out_data):
+            with open(out_data, 'wb') as f:
+                pickle.dump({
+                    'boxes': cls_boxes,
+                    'segmentations': cls_segms,
+                    'keypoints': cls_keyps
+                }, f)
+
+        if not os.path.isfile(out_image):
+            logging.info('Visualizing %s', out_image)
+            vis_utils.vis_one_image(
+                im[:, :, ::-1],  # BGR -> RGB for visualization
+                base_name,
+                args.output_dir,
+                cls_boxes,
+                cls_segms,
+                cls_keyps,
+                dataset=dummy_coco_dataset,
+                box_alpha=0.3,
+                show_class=True,
+                thresh=0.7,
+                kp_thresh=2,
+                ext='png'
+            )
 
 
 if __name__ == '__main__':
