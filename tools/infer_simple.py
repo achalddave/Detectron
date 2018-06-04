@@ -159,6 +159,7 @@ def main(args):
                 show_class=True,
                 thresh=0.7,
                 kp_thresh=2,
+                dpi=300,
                 ext='png'
             )
 
