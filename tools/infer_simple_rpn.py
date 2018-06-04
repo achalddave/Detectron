@@ -99,6 +99,8 @@ def main(args):
     cfg.NUM_GPUS = 1
     cfg.MODEL.MASK_ON = False
     cfg.MODEL.RPN_ONLY = True
+    cfg.TEST.RPN_POST_NMS_TOP_N = 500
+    print('RPN_POST_NMS_TOP_N:', cfg.TEST.RPN_POST_NMS_TOP_N)
     args.weights = cache_url(args.weights, cfg.DOWNLOAD_CACHE)
     assert_and_infer_cfg(cache_urls=False)
     model = infer_engine.initialize_model_from_cfg(args.weights)
