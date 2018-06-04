@@ -10,6 +10,7 @@ install:
 
 .PHONY: ops
 ops:
+	# mkdir -p build && cd build && cmake -C ~/trinity/utils/setup/caffe2/detectron_cmake_config.cmake -DUSE_TENSORRT=False -DCUDA_ARCH_NAME=Pascal .. && make -j$(shell nproc)
 	mkdir -p build && cd build && cmake .. && make -j$(shell nproc)
 
 .PHONY: dev
