@@ -107,6 +107,7 @@ def main(args):
         im_list = [args.im_or_folder]
 
     for i, im_name in enumerate(im_list):
+        os.makedirs(args.output_dir, exist_ok=True)
         base_name = os.path.splitext(os.path.basename(im_name))[0]
         out_image = os.path.join(
             args.output_dir, '{}'.format(base_name + '.png')
